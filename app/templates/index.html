@@ -5,7 +5,7 @@
 <p>Current User: {{ user.username }}</p>
 
 {% for post in posts %}
-    <h6><b>{{post.author.username}} says:</b> {{post.body}}</h6>
+    <h3>{{post.author.username}} says: {{post.body}}</h3>
 {% endfor %}
 
 {%endblock content%}
