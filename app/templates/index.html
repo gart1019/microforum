@@ -2,10 +2,13 @@
 
 {%block content%}
 
-<p>Current User: {{ user.username }}</p>
+{% if not current_user.is_anonymous %}
+    <h1>Hi, {{current_user.username}}!</h1>
+{% endif %}
 
 {% for post in posts %}
-    <h3>{{post.author.username}} says: {{post.body}}</h3>
+    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
 {% endfor %}
+
 
 {%endblock content%}
