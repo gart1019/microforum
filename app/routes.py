@@ -1,5 +1,5 @@
 from app import app, db
-from app.forms import LoginForm
+from app.forms import LoginForm, RegistrationForm
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
@@ -17,7 +17,7 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
 
-    #Create user obj
+    #Select user obj
     if form.validate_on_submit():
         user = db.session.scalar(sa.select(User).where(User.username == form.username.data))
     
@@ -36,6 +36,15 @@ def login():
         
     return render_template('login.html',title='Log in',form=form)
 
+@app.route('/register', methods=['GET','POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
+    form = RegistrationForm
+
+    return render_template('register.html', form=form)
+    
 
 @app.route('/cat-images')
 @login_required
