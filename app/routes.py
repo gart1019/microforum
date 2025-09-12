@@ -36,20 +36,28 @@ def login():
         
     return render_template('login.html',title='Log in',form=form)
 
-@app.route('/register', methods=['GET','POST'])
+@app.route('/register')
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    
-    form = RegistrationForm
 
-    return render_template('register.html', form=form)
-    
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(form.username.data, form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('New user successfully created.')
+        return redirect(url_for('index'))
 
-@app.route('/cat-images')
+    return render_template('register.html', title='Register', form=form)
+
+@app.route('/user/<username>')
 @login_required
-def cat_pics():
-    return render_template('cat_pics.html', title='Cat Pics')
+def user(username):
+    user=db.first_or_404(sa.select(User).where(User.username == username))
+    return render_template('user.html', user=user)
+
     
 
 @app.route('/logout')

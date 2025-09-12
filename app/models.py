@@ -13,6 +13,11 @@ class User(UserMixin, db.Model):
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
     posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
 
+    def __init__(self, username, email) -> None:
+        super().__init__()
+        self.username = username
+        self.email = email
+
     @login.user_loader
     def load_user(id):
         return db.session.get(User, id)

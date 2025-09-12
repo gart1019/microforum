@@ -16,11 +16,10 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    remember_me = BooleanField('Remember Me')
     submit = SubmitField('Register')
 
     def validate_username(self, username):
-        user = db.session.scalar(sa.select(User).where(User.name == username.data))
+        user = db.session.scalar(sa.select(User).where(User.username == username.data))
         if user is not None:
             raise ValidationError('Please enter a different username.')
     
