@@ -6,10 +6,13 @@ from urllib.parse import urlsplit
 import sqlalchemy as sa
 from app.models import User
 
+
 @app.route("/")
 @app.route("/index")
+@login_required
 def index():
     return render_template("index.html", title="Home")
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -36,6 +39,7 @@ def login():
         
     return render_template('login.html',title='Log in',form=form)
 
+
 @app.route('/register')
 def register():
     if current_user.is_authenticated:
@@ -52,13 +56,13 @@ def register():
 
     return render_template('register.html', title='Register', form=form)
 
+
 @app.route('/user/<username>')
 @login_required
 def user(username):
     user=db.first_or_404(sa.select(User).where(User.username == username))
     return render_template('user.html', user=user)
 
-    
 
 @app.route('/logout')
 def logout():
