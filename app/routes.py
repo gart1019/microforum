@@ -5,6 +5,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from urllib.parse import urlsplit
 import sqlalchemy as sa
 from app.models import User
+from datetime import datetime, timezone
 
 
 @app.route("/")
@@ -61,10 +62,20 @@ def register():
 @login_required
 def user(username):
     user=db.first_or_404(sa.select(User).where(User.username == username))
-    return render_template('user.html', user=user)
+    posts = [
+        {'author': user, 'body': 'Test post #1'},
+        {'author': user, 'body': 'Test post #2'}
+    ]
+    return render_template('user.html', user=user, posts=posts)
 
 
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.now(timezone.utc)
+        db.session.commit()

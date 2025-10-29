@@ -1,9 +1,14 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, EqualTo, ValidationError
+from wtforms.validators import DataRequired, EqualTo, ValidationError, Length
 from app import db
 from app.models import User
 import sqlalchemy as sa
+
+class EditProfileForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired(),Length(max=30)])
+    about_me = StringField("About me", validators=[Length(min=0,max=30)])
+    submit = SubmitField('Submit')
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

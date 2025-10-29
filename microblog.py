@@ -5,7 +5,7 @@ from app.models import User, Post
 from werkzeug.security import generate_password_hash
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
 
 @app.shell_context_processor
 def make_shell_context():
